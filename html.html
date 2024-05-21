@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,6 +19,8 @@
             color: #fff;
             padding: 1rem 0;
             text-align: center;
+            border-radius: 10px; /* Custom border-radius */
+            margin-bottom: 1rem;
         }
 
         nav ul {
@@ -46,28 +50,31 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
+            border-radius: 10px; /* Custom border-radius */
+            overflow: hidden; /* To apply border-radius to the table */
         }
 
         #projectsTable th, #projectsTable td {
-            border: 1px solid #ddd;
+            border: 1px solid #f7f0f0;
             padding: 8px;
             text-align: left;
         }
 
         #projectsTable th {
-            background-color: #f2f2f2;
+            background-color: #918a8a;
         }
 
         button {
             padding: 0.5rem 1rem;
             margin: 0.5rem;
             border: none;
-            color: #fff;
+            color: #fcf9f9;
             cursor: pointer;
+            border-radius: 5px; /* Custom border-radius */
         }
 
         .updateBtn {
-            background-color: #28a745; /* Green color */
+            background-color: #31a94d; /* Green color */
         }
 
         .updateBtn:hover {
@@ -82,6 +89,14 @@
             background-color: #c82333;
         }
 
+        .viewBtn {
+            background-color: #007bff; /* Blue color */
+        }
+
+        .viewBtn:hover {
+            background-color: #0056b3;
+        }
+
         footer {
             background-color: #333;
             color: #fff;
@@ -90,59 +105,63 @@
             position: fixed;
             width: 100%;
             bottom: 0;
+            border-radius: 10px; /* Custom border-radius */
         }
     </style>
 </head>
 <body>
-    <header>
+    <header class="mb-4">
         <h1>Project Management</h1>
         <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <ul class="nav justify-content-center">
+                <li class="nav-item"><a class="nav-link text-white" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
     
-    <main>
-        <section id="home">
+    <main class="container">
+        <section id="home" class="mb-4">
             <h2>Home</h2>
             <p>Welcome to the Project Management System.</p>
         </section>
         
-        <section id="projects">
+        <section id="projects" class="mb-4">
             <h2>Projects</h2>
-            <button id="addProjectBtn">Add Project</button>
-            <table id="projectsTable">
-                <thead>
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Example project row -->
-                    <tr>
-                        <td>Sample Project</td>
-                        <td>This is a sample project description.</td>
-                        <td>
-                            <button class="updateBtn">Update</button>
-                            <button class="deleteBtn">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <button id="addProjectBtn" class="btn btn-primary mb-3">Add Project</button>
+            <div class="table-responsive">
+                <table id="projectsTable" class="table table-striped rounded"> <!-- Bootstrap rounded class -->
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example project row -->
+                        <tr>
+                            <td>Sample Project</td>
+                            <td>This is a sample project description.</td>
+                            <td>
+                                <button class="viewBtn btn btn-primary btn-sm">View</button>
+                                <button class="updateBtn btn btn-success btn-sm">Update</button>
+                                <button class="deleteBtn btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
         
-        <section id="about">
+        <section id="about" class="mb-4">
             <h2>About</h2>
             <p>About the project management system.</p>
         </section>
         
-        <section id="contact">
+        <section id="contact" class="mb-4">
             <h2>Contact</h2>
             <p>Contact information.</p>
         </section>
@@ -173,16 +192,22 @@
                 row.insertCell(1).innerText = description;
 
                 const actionsCell = row.insertCell(2);
+                const viewBtn = document.createElement('button');
+                viewBtn.className = 'viewBtn btn btn-primary btn-sm';
+                viewBtn.innerText = 'View';
+                viewBtn.addEventListener('click', () => viewProject(name, description));
+
                 const updateBtn = document.createElement('button');
-                updateBtn.className = 'updateBtn';
+                updateBtn.className = 'updateBtn btn btn-success btn-sm';
                 updateBtn.innerText = 'Update';
                 updateBtn.addEventListener('click', () => updateProject(row));
 
                 const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'deleteBtn';
+                deleteBtn.className = 'deleteBtn btn btn-danger btn-sm';
                 deleteBtn.innerText = 'Delete';
                 deleteBtn.addEventListener('click', () => deleteProject(row));
 
+                actionsCell.appendChild(viewBtn);
                 actionsCell.appendChild(updateBtn);
                 actionsCell.appendChild(deleteBtn);
             }
@@ -203,7 +228,22 @@
                     projectsTable.deleteRow(row.rowIndex - 1);
                 }
             }
+
+            // Function to view a project's details
+            function viewProject(name, description) {
+                const projectDetails = {
+                    name: name,
+                    description: description,
+                    startDate: '2024-01-01',
+                    endDate: '2024-12-31',
+                    budget: '10000'
+                };
+                localStorage.setItem('projectDetails', JSON.stringify(projectDetails));
+                window.location.href = 'project-details.html';
+            }
         });
     </script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

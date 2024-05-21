@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        section {
+            margin: 2rem 0;
+        }
+
+        #projectsTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        #projectsTable th, #projectsTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #projectsTable th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .updateBtn {
+            background-color: #28a745; /* Green color */
+        }
+
+        .updateBtn:hover {
+            background-color: #218838;
+        }
+
+        .deleteBtn {
+            background-color: #dc3545; /* Red color */
+        }
+
+        .deleteBtn:hover {
+            background-color: #c82333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Project Management</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home">
+            <h2>Home</h2>
+            <p>Welcome to the Project Management System.</p>
+        </section>
+        
+        <section id="projects">
+            <h2>Projects</h2>
+            <button id="addProjectBtn">Add Project</button>
+            <table id="projectsTable">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example project row -->
+                    <tr>
+                        <td>Sample Project</td>
+                        <td>This is a sample project description.</td>
+                        <td>
+                            <button class="updateBtn">Update</button>
+                            <button class="deleteBtn">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="about">
+            <h2>About</h2>
+            <p>About the project management system.</p>
+        </section>
+        
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Contact information.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Your Name. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const projectsTable = document.getElementById('projectsTable').getElementsByTagName('tbody')[0];
+            const addProjectBtn = document.getElementById('addProjectBtn');
+
+            // Add project button click event
+            addProjectBtn.addEventListener('click', () => {
+                const projectName = prompt('Enter project name:');
+                const projectDescription = prompt('Enter project description:');
+                if (projectName && projectDescription) {
+                    addProject(projectName, projectDescription);
+                }
+            });
+
+            // Function to add a project to the table
+            function addProject(name, description) {
+                const row = projectsTable.insertRow();
+                row.insertCell(0).innerText = name;
+                row.insertCell(1).innerText = description;
+
+                const actionsCell = row.insertCell(2);
+                const updateBtn = document.createElement('button');
+                updateBtn.className = 'updateBtn';
+                updateBtn.innerText = 'Update';
+                updateBtn.addEventListener('click', () => updateProject(row));
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'deleteBtn';
+                deleteBtn.innerText = 'Delete';
+                deleteBtn.addEventListener('click', () => deleteProject(row));
+
+                actionsCell.appendChild(updateBtn);
+                actionsCell.appendChild(deleteBtn);
+            }
+
+            // Function to update a project in the table
+            function updateProject(row) {
+                const projectName = prompt('Update project name:', row.cells[0].innerText);
+                const projectDescription = prompt('Update project description:', row.cells[1].innerText);
+                if (projectName && projectDescription) {
+                    row.cells[0].innerText = projectName;
+                    row.cells[1].innerText = projectDescription;
+                }
+            }
+
+            // Function to delete a project from the table
+            function deleteProject(row) {
+                if (confirm('Are you sure you want to delete this project?')) {
+                    projectsTable.deleteRow(row.rowIndex - 1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
